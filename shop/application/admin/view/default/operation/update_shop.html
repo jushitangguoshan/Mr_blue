@@ -1,0 +1,90 @@
+{{include file="public/header" /}}
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- form start -->
+        <form class="am-form form-validation view-save" action="{{:MyUrl('admin/operation/updateShop')}}" method="POST" request-type="ajax-url" request-value="{{:MyUrl('admin/operation/updateShop')}}">
+            <legend>
+				<span class="fs-16">
+					{{if empty($data['id'])}}
+						成员添加
+					{{else /}}
+						成员编辑
+					{{/if}}
+				</span>
+                <a href="{{:MyUrl('admin/operation/Activity')}}" class="fr fs-14 m-t-5 am-icon-mail-reply"> 返回</a>
+            </legend>
+            <div class="am-form-group">
+                <label>商品标题</label>
+                <input type="text" name="title"  placeholder="商品名称" disabled  {{if !empty($data.title)}} value="{{$data.title}}" {{/if}}/>
+            </div>
+            <div class="am-form-group">
+                <label>商品LOGO</label>
+                {{if !empty($data['images'])}}
+                <a href="{{$data['images']}}" target="_blank" disabled>
+                    <img src="{{$data['images']}}" class="am-radius" width="100" />
+                </a>
+                {{else /}}
+                <span class="cr-ddd">暂无图片</span>
+                {{/if}}
+            </div>
+
+            <div class="am-form-group">
+                <label>原价</label>
+                <input type="text" name="original_price"  placeholder="商品促销价格"  {{if !empty($data.original_price)}} value="{{$data.original_price}}" {{/if}}/>
+            </div>
+            <div class="am-form-group">
+                <label>活动价</label>
+                <input type="text" name="price"  placeholder="0"  {{if !empty($data.price)}} value="{{$data.price}}" {{/if}}/>
+            </div>
+            <div class="am-form-group">
+                <label>最低购买数量</label>
+                <input type="text" name="buy_min_number"   {{if !empty($data.buy_min_number)}} value="{{$data.buy_min_number}}" {{/if}}/>
+            </div>
+            <div class="am-form-group">
+                <label>最高购买数量</label>
+                <input type="text" placeholder="0" name="buy_max_number" data-validation-message="详细地址2~60 个字符" {{if !empty($data.buy_max_number)}} value="{{$data.buy_max_number}}"{{else}}0{{/if}} />
+            </div>
+            <div class="am-form-group">
+                <label>购买送积分</label>
+                <input type="text" placeholder="0" name="give_integral" data-validation-message="详细地址2~60 个字符"{{if !empty($data.give_integral)}} value="{{$data.give_integral}}"{{else}}0{{/if}}  />
+            </div>
+            <div class="am-form-group">
+                <label>抢购时间</label>
+                <input type="text" placeholder="0" name="seckill_stime" data-validation-message="详细地址2~60 个字符"class="am-radius Wdate" {{if !empty($data.seckill_stime)}} value="{{$data.seckill_stime}}"{{else}}0{{/if}} onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd'})" />
+            </div>
+            <div class="am-form-group">
+                <label>结束时间</label>
+                <input type="text" placeholder="0" name="seckill_etime" data-validation-message="详细地址2~60 个字符"class="am-radius Wdate" {{if !empty($data.seckill_etime)}} value="{{$data.seckill_etime}}"{{else}}0{{/if}} onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd'})" />
+            </div>
+            <div class="am-form-group">
+                <label>状态</label>
+
+                <input type="text" name="seckill_status"  disabled value="
+                        {{if($data.seckill_status == 0)}}审核中
+                        {{elseif($data.seckill_status == 1)}}已通过
+                        {{elseif($data.seckill_status == 2)}}已拒绝
+                        {{else}}秒杀活动结束
+                        {{/if}} ">
+
+
+                    <!--<option value="0">审核中</option>
+                    <option value="1">审核通过</option>
+                    <option value="2">审核拒绝</option>
+                    <option value="3">秒杀活动结束</option>-->
+                </select>
+                <!--<input type="text" placeholder="结束时间" name="goods_lower_time" data-validation-message="详细地址2~60 个字符"class="am-radius Wdate" {{if !empty($data.goods_lower_time)}} value="{{$data.goods_lower_time}}"{{else}}0{{/if}} onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd'})" />-->
+            </div>
+            <div class="am-form-group">
+                <input type="hidden" name="id" {{if !empty($data.id)}} value="1"{{/if}} />
+                <button type="submit" class="am-btn am-btn-primary am-radius btn-loading-example am-btn-sm w100" data-am-loading="{loadingText:'处理中...'}">保存</button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{include file="public/footer" /}}
+<!-- footer end -->

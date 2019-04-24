@@ -1,0 +1,32 @@
+{{include file="public/header" /}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <button onClick="backup()">点击备份</button>
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{include file="public/footer" /}}
+<!-- footer end -->
+<script type="text/javascript">
+    function backup(){
+        // console.log("{{:MyUrl('admin/system/Orders')}}");
+        $.ajax({
+            type: "GET",
+            url: "{{:MyUrl('admin/system/Orders')}}",
+            data: "",
+            beforeSend: function (XMLHttpRequest) {
+                loadingFlag = layer.msg('正在恢复，请稍候……', { icon: 16, shade: 0.01,shadeClose:false,time : false });
+            },
+            success: function(msg){
+                if (msg==1) {
+                    layer.close(loadingFlag);
+                    alert('成功备份！');
+                }
+            }
+        });
+    }
+</script>

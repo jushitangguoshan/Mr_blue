@@ -1,0 +1,6 @@
+前台http://solarshop.com
+后台http://solarshop.com/index.php?s=admin
+登录账号：
+admin
+密码是：
+amdin888

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="content-right">
+    <div class="content">
+<table class="am-table am-table-striped am-table-hover am-text-middle m-t-10">
+    <div class="am-popup am-radius">
+        <div class="am-popup-inner">
+            <div class="am-popup-hd">
+                <h4 class="am-popup-title">详情内容</h4>
+                <a href="{{:MyUrl('admin/Orderexchange/index')}}" class="fr fs-14 m-t-5 am-icon-mail-reply"> 返回</a>
+            </div>
+            <div class="am-popup-bd">
+                {{if(!empty($data))}}
+                {{foreach($data as $v)}}
+                <tr class="dl-content" style="line-height: 50px;" >
+                    <td>商品标题</td>
+                    <td >{{if empty($v['title'])}}<span class="cr-ddd">未填写</span>{{else /}}{{$v.title}}{{/if}}</td>
+                </tr>
+                <tr class="dl-content" style="line-height: 50px">
+                    <td>封面图片</td>
+                    <td>
+                        {{if !empty($v['images'])}}
+                        <img src="{{$v['images']}}" class="am-img-thumbnail am-radius" width="100" height="100" />
+                        {{else /}}
+                        <span class="cr-ddd">暂无图片</span>
+                        {{/if}}
+                    </td>
+                </tr>
+                <tr class="dl-content" style="line-height: 50px">
+                    <td>原价</td>
+                    <td>{{if empty($v['original_price'])}}<span class="cr-ddd">未填写</span>{{else /}}{{$v.original_price}}{{/if}}</td>
+                </tr>
+                <tr class="dl-content" style="line-height: 50px">
+                    <td>订单价格</td>
+                    <td>{{if empty($v['price'])}}<span class="cr-ddd">未填写</span>{{else /}}{{$v.price}}{{/if}}</td>
+                </tr>
+                <tr class="dl-content" style="line-height: 50px">
+                    <td>规格</td>
+                    <td>{{if empty($v['spec'])}}<span class="cr-ddd">未设置</span>{{else /}}{{$v.spec}}{{/if}}</td>
+                </tr>
+                <tr class="dl-content" style="line-height: 50px">
+                    <td>退货数量</td>
+                    <td>{{if empty($v['buy_number'])}}<span class="cr-ddd">未填写</span>{{else /}}{{$v.buy_number}}{{/if}}</td>
+                </tr>
+                <tr class="dl-content" style="line-height: 50px">
+                    <td>重量</td>
+                    <td>{{if empty($v['spec_weight'])}}<span class="cr-ddd">未填写</span>{{else /}}{{$v.spec_weight}}{{/if}}</td>
+                </tr>
+                <tr class="dl-content" style="line-height: 50px">
+                    <td>编码</td>
+                    <td>{{if empty($v['spec_coding'])}}<span class="cr-ddd">未填写</span>{{else /}}{{$v.spec_coding}}{{/if}}</td>
+                </tr>
+                <tr class="dl-content" style="line-height: 50px">
+                    <td>条形码</td>
+                    <td>{{if empty($v['spec_barcode'])}}<span class="cr-ddd">未填写</span>{{else /}}{{$v.spec_barcode}}{{/if}}</td>
+                </tr>
+                <tr class="dl-content" style="line-height: 50px">
+                    <td>添加时间</td>
+                    <td>{{if empty($v['add_time'])}}<span >0</span>{{else /}}{{$v.add_time}}{{/if}}</td>
+                </tr>
+                <tr class="dl-content" style="line-height: 50px">
+                    <td>更新时间</td>
+                    <td>{{if empty($v['upd_time'])}}<span >0</span>{{else /}}{{$v.upd_time}}{{/if}}</td>
+                </tr>
+                {{/foreach}}
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</table>
+        </div>
+    </div>
+</body>
+</html>

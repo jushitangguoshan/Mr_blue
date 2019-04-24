@@ -1,0 +1,78 @@
+{{include file="public/header" /}}
+<link rel="stylesheet" type="text/css" href="/shop/public/static/admin/default/css/index.init.css" />
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <form class="am-form view-list" action="{{:MyUrl('admin/zoology/OrderIncome')}}" method="POST">
+            <div class="am-g">
+                <div class="more-where">
+                    <div class="param-date param-where m-l-5">
+                        <input type="text" autocomplete="off" name="time_start" class="Wdate am-radius m-t-10" placeholder="起始时间" style="width:200px;height:30px;" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd HH:mm:ss'})" {{if isset($params['time_start'])}}value="{{$params.time_start}}"{{/if}}/>
+                        <span>~</span>
+                        <input type="text" autocomplete="off" class="Wdate am-radius m-t-10" placeholder="结束时间" name="time_end" style="width:200px;height:30px;" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd HH:mm:ss'})" {{if isset($params['time_end'])}}value="{{$params.time_end}}"{{/if}}/>
+                    </div>
+                    <button type="submit" class="am-btn am-btn-secondary am-btn-sm am-radius form-submit">查询</button>
+                </div>
+            </div>
+        </form>
+        <!-- 基础统计 -->
+        <div class="echarts-container shopxo-base">
+            <div class="echarts-title">
+                <span class="icon"></span>
+                <span class="title">订单数统计</span>
+                <a href="{{:MyUrl('admin/zoology/index')}}" class="fr fs-14 m-t-5 am-icon-mail-reply"> 返回</a>
+            </div>
+            {{if empty($data)}}
+
+            <ul class="am-avg-sm-2 am-avg-lg-4">
+                <li>
+                    <div class="li-content">
+                        <p class="name">今日收入总量</p>
+                        <p class="total animation-count-to" data-to="{{}}" data-speed="1500">{{if empty($day)}}0 {{else /}} {{$day[0]['sum(total_price)']}}{{/if}}</p>
+                        <i class="am-icon-user am-icon-lg bg-icon"></i>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="li-content">
+                        <p class="name">本周收入总量</p>
+                        <p class="total animation-count-to" data-to="{{}}" data-speed="1500">{{if empty($Week)}}0 {{else /}}{{$Week[0]['sum(total_price)']}}{{/if}}</p>
+
+                        <i class="am-icon-list-alt am-icon-lg bg-icon"></i>
+                    </div>
+                </li>
+                <li>
+                    <div class="li-content">
+                        <p class="name">本月收入总量</p>
+                        <p class="total animation-count-to" data-to="{{}}" data-speed="1500">{{if empty($Month)}}0 {{else /}}{{$Month[0]['sum(total_price)']}}{{/if}}</p>
+
+                        <i class="am-icon-gg am-icon-lg bg-icon"></i>
+                    </div>
+                </li>
+                <li>
+                    <div class="li-content">
+                        <p class="name">本年度收入总量</p>
+                        <p class="total animation-count-to" data-to="{{}}" data-speed="1500" data-decimals="2">{{if empty($Year)}}0 {{else /}}{{$Year[0]['sum(total_price)']}}{{/if}}</p>
+
+                        <i class="am-icon-gift am-icon-lg bg-icon"></i>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        {{else /}}
+
+        <ul class="am-avg-sm-2 am-avg-lg-4">
+            <li>
+                <div class="li-content" style="align-content: center">
+                    <p class="name">{{$addtime}} - {{$updtime}} 的 订 单 数</p>
+                    <p class="total animation-count-to" data-to="{{}}"   data-speed="1500">{{if empty($data)}}0 {{else /}} {{$data[0]['sum(total_price)']}}{{/if}}</p>
+                    <i class="am-icon-user am-icon-lg bg-icon"></i>
+                </div>
+            </li>
+        </ul>
+        {{/if}}
+    </div>
+</div>
+</div>
+<script type='text/javascript' src="{{$Think.__MY_ROOT_PUBLIC__}}static/common/lib/My97DatePicker/WdatePicker.js"></script>

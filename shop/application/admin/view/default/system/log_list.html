@@ -1,0 +1,75 @@
+{{include file="public/header" /}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- form start -->
+        <br>
+        <form class="view-list" action="{{:MyUrl('admin/system/logList')}}" method="POST">
+            <div class="am-g">
+                <input type="text" autocomplete="off" style="width: 200px;height: 32px; margin-top: 10px;" class="am-radius form-keyword" placeholder="用户名" name="username" {{if !empty($params['username'])}} value="{{$params.username}}"{{/if}} />&nbsp;&nbsp;
+                <select name="role_id" style="width: 200px" class="am-radius c-p m-t-10 m-l-5 param-where">
+                    <option value="-1">权限组</option>
+                    {{foreach $role as $v}}
+                    <option value="{{$v.id}}" {{if isset($params['role_id']) and $params['role_id'] eq $v['id']}}selected{{/if}}>{{$v.name}}</option>
+                    {{/foreach}}
+                </select>
+                &nbsp;&nbsp;
+                <select name="title" style="width: 200px" class="am-radius c-p m-t-10 m-l-5 param-where">
+                    <option value="-1">操作方式</option>
+                    <option value="增加" {{if isset($params['title']) and $params['title'] eq '增加'}}selected{{/if}}>增加</option>
+                    <option value="修改" {{if isset($params['title']) and $params['title'] eq '修改'}}selected{{/if}}>修改</option>
+                    <option value="删除" {{if isset($params['title']) and $params['title'] eq '删除'}}selected{{/if}}>删除</option>
+                </select>
+                &nbsp;&nbsp;
+                <input type="text" autocomplete="off" style="width: 200px;height: 32px;" name="time_start" class="Wdate am-radius m-t-10" placeholder="起始时间" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd HH:mm:ss'})" {{if isset($params['time_start'])}}value="{{$params.time_start}}"{{/if}}/>
+                <span>~</span>
+                <input type="text" autocomplete="off" style="width: 200px;height: 32px;" class="Wdate am-radius m-t-10" placeholder="结束时间" name="time_end" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd HH:mm:ss'})" {{if isset($params['time_end'])}}value="{{$params.time_end}}"{{/if}}/>
+
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <button type="submit" style="margin-top: 10px" class="am-btn am-btn-secondary am-btn-sm am-radius form-submit">查询</button>
+            </div>
+        </form>
+        <!-- form end -->
+
+
+        <!-- list start -->
+        <table class="am-table am-table-striped am-table-hover am-text-middle m-t-10">
+            <thead>
+            <tr>
+                <th>操作人</th>
+                <th class="am-hide-sm-only">权限组</th>
+                <th>操作方式</th>
+                <th class="am-hide-sm-only">操作内容</th>
+                <th class="am-hide-sm-only">操作时间</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{if !empty($data)}}
+            {{foreach $data as $v}}
+            <tr id="data-list-{{$v.id}}">
+                <td>{{$v.username}}</td>
+                <td class="am-hide-sm-only">{{$v.role_name}}</td>
+                <td>{{$v['title']}}</td>
+                <td class="am-hide-sm-only">{{$v.detail}}
+                </td>
+                <td class="am-hide-sm-only">{{:date('Y-m-d H:i:s', $v['add_time'])}}</td>
+            </tr>
+            {{/foreach}}
+            {{else /}}
+            <tr><td colspan="5" class="table-no">没有相关数据</td></tr>
+            {{/if}}
+            </tbody>
+        </table>
+        <!-- list end -->
+
+        <!-- page start -->
+        {{if !empty($data)}}
+        {{$page_html|raw}}
+        {{/if}}
+        <!-- page end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+{{include file="public/footer" /}}

@@ -1,0 +1,90 @@
+{{include file="public/header" /}}
+<!-- 引用Jquery -->
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<!-- right content start  -->
+<div class="content-right">
+	<div class="content">
+		<!-- form start -->
+		<form class="am-form form-validation view-save" action="{{:MyUrl('admin/storage/save')}}" method="POST" request-type="ajax-url" request-value="{{:MyUrl('admin/storage/storage_list', $params)}}" enctype="multipart/form-data">
+			<legend>
+				<span class="fs-16">
+					{{if empty($data['id'])}}
+						添加仓库
+					{{else /}}
+						编辑仓库
+					{{/if}}
+				</span>
+				<a href="{{:MyUrl('admin/storage/storage_list', $params)}}" class="fr fs-14 m-t-5 am-icon-mail-reply"> 返回</a>
+			</legend>
+			<div class="am-form-group">
+				<label>名称</label>
+				<input type="text" name="name" placeholder="名称" minlength="2" maxlength="30" data-validation-message="名称格式 2~30 个字符" class="am-radius" {{if !empty($data)}} value="{{$data.name}}"{{/if}} required />
+			</div>
+			<!-- 添加或者修改所在地区 -->
+			<div class="am-form-group">
+				<label>所在地区</label>
+				<select name="pro" id="pro">
+					<option>--请选择省份--</option>
+						{{foreach $region as $v}}
+
+   					 <option value="{{$v.area_id}}" {{if isset($data['pro_id']) and $data['pro_id'] eq $v['area_id']}} selected {{/if}}>{{$v.area_name}}</option>
+   					    {{/foreach}}
+				</select>
+				<select name="city" id="city">
+					<option >{{if !empty($data)}} {{$data.city_name}} {{/if}}</option>
+				</select>
+				<select name="area" id="area">
+					<option>{{if !empty($data)}} {{$data.area_name}} {{/if}}</option>
+				</select>
+			   
+			</div>
+
+			<div class="am-form-group">
+				<label>地址<span class="fs-12 fw-100 cr-999"></span></label>
+				<input type="text" placeholder="地址" name="address"  data-validation-message="地址格式 2~50 个字符" class="am-radius" {{if !empty($data)}} value="{{$data.address}}"{{/if}} />
+			</div>
+
+			<div class="am-form-group">
+				<input type="hidden" name="id" {{if !empty($data)}} value="{{$data.id}}"{{/if}} />
+				<button type="submit" class="am-btn am-btn-primary am-radius btn-loading-example am-btn-sm w100" data-am-loading="{loadingText:'处理中...'}">保存</button>
+			</div>
+		</form>
+        <!-- form end -->
+	</div>
+</div>
+<!-- right content end  -->
+		
+<!-- footer start -->
+{{include file="public/footer" /}}
+<!-- footer end -->
+
+	<!-- 三级地区选择 -->
+   <script>
+        $('#pro').change(function(){
+        	var pro_id=$('#pro').val();
+
+            $.ajax({
+                type:"POST",
+                url:"{{:MyUrl('Storage/Region')}}",
+                data:{pro_id:pro_id},
+                dataType:"json",
+                success:function(data){
+                    $('#city').html(data);
+                },
+            })
+        });
+
+        $('#city').change(function(){
+        	var city_id=$('#city').val();
+        $.ajax({
+            type:"POST",
+            url:"{{:MyUrl('Storage/Region')}}",
+            data:{pro_id:city_id},
+            dataType:"json",
+            success:function(data){
+
+                 $('#area').html(data);
+            }
+        });
+    });
+    </script>

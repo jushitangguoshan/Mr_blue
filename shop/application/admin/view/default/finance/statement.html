@@ -1,0 +1,94 @@
+{{include file="public/header" /}}
+<link rel="stylesheet" type="text/css" href="{{$Think.__MY_ROOT_PUBLIC__}}static/admin/default/css/index.init.css" />
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- 基础统计 -->
+        <div class="echarts-container shopxo-base">
+            <div class="echarts-title">
+                <span class="icon"></span>
+                <span class="title">收入统计</span>
+            </div>
+            {{if !empty($data)}}
+            <ul class="am-avg-sm-2 am-avg-lg-4">
+                <li>
+                    <div class="li-content">
+                        <a href="{{:MyUrl('admin/Finance/DayOrderDetail')}}" style="margin-left: 90%; color: white">详情</a>
+                        <p class="name">今日收入总金额</p>
+                        {{if empty($data['day'])}}
+                            <p class="total animation-count-to" data-to="{{}}" data-speed="1500">￥0.00</p>
+                            {{else /}}
+                            <p class="total animation-count-to" data-to="{{}}" data-speed="1500">  ￥{{$data['day']['total_price']}}</p>
+                            <p class="name">实际收入： </p>
+                            <p class="total animation-count-to" data-to="{{}}" data-speed="1500">￥{{$data['day']['actual_price']}}</p>
+                            <p class="name">优惠金额： </p>
+                            <p class="total animation-count-to" data-to="{{}}" data-speed="1500"> ￥{{$data['day']['favorable_price']}}</p>
+                        {{/if}}
+                        <i class="am-icon-user am-icon-lg bg-icon"></i>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="li-content">
+                        <a href="{{:MyUrl('admin/Finance/WeekOrderDetail')}}" style="margin-left: 90%; color: white">详情</a>
+                        <p class="name">本周收入总金额</p>
+                        {{if empty($data['week'])}}
+                            <p class="total animation-count-to" data-to="{{}}" data-speed="1500">0.00 </p>
+                            {{else /}}
+                            <p class="total animation-count-to" data-to="{{}}" data-speed="1500">￥{{$data['week']['total_price']}}</p>
+                            <p class="name">实际收入： </p>
+                            <p class="total animation-count-to" data-to="{{}}" data-speed="1500">￥{{$data['week']['actual_price']}}</p>
+                            <p class="name">优惠金额： </p>
+                            <p class="total animation-count-to" data-to="{{}}" data-speed="1500"> ￥{{$data['week']['favorable_price']}}</p>
+                        {{/if}}
+                    </div>
+                </li>
+                <li>
+                    <div class="li-content">
+                        <a href="{{:MyUrl('admin/Finance/MonthOrderDetail')}}" style="margin-left: 90%; color: white">详情</a>
+                        <p class="name">本月收入总金额</p>
+                        {{if empty($data['month'])}}
+                            <p class="total animation-count-to" data-to="{{}}" data-speed="1500">0.00 </p>
+                            {{else /}}
+                            <p class="total animation-count-to" data-to="{{}}" data-speed="1500">￥{{$data['month']['total_price']}}</p>
+                            <p class="name">实际收入： </p>
+                            <p class="total animation-count-to" data-to="{{}}" data-speed="1500">￥{{$data['month']['actual_price']}}</p>
+                            <p class="name">优惠金额： </p>
+                            <p class="total animation-count-to" data-to="{{}}" data-speed="1500"> ￥{{$data['month']['favorable_price']}}</p>
+                        {{/if}}
+                        <i class="am-icon-gg am-icon-lg bg-icon"></i>
+                    </div>
+                </li>
+                <li>
+                    <div class="li-content">
+                        <a href="{{:MyUrl('admin/Finance/YearOrderDetail')}}" style="margin-left: 90%; color: white">详情</a>
+                        <p class="name">本年度收入总金额</p>
+                        {{if empty($data['year'])}}
+                            <p class="total animation-count-to" data-to="{{}}" data-speed="1500" data-decimals="2">0.00</p>
+                            {{else /}}
+                            <p class="total animation-count-to" data-to="{{}}" data-speed="1500" data-decimals="2">￥{{$data['year']['total_price']}}</p>
+                            <p class="name">实际收入： </p>
+                            <p class="total animation-count-to" data-to="{{}}" data-speed="1500">￥{{$data['year']['actual_price']}}</p>
+                            <p class="name">优惠金额： </p>
+                            <p class="total animation-count-to" data-to="{{}}" data-speed="1500"> ￥{{$data['year']['favorable_price']}}</p>
+                        {{/if}}
+                        <i class="am-icon-gift am-icon-lg bg-icon"></i>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        {{else /}}
+
+        <ul class="am-avg-sm-2 am-avg-lg-4">
+            <li>
+                <div class="li-content" style="align-content: center">
+                    <p class="name">暂 无 订 单 信 息</p>
+                </div>
+            </li>
+        </ul>
+        {{/if}}
+    </div>
+</div>
+</div>
+<script type='text/javascript' src="{{$Think.__MY_ROOT_PUBLIC__}}static/common/lib/My97DatePicker/WdatePicker.js"></script>

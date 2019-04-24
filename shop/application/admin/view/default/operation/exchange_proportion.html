@@ -1,0 +1,73 @@
+{{include file="public/header" /}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- form start -->
+        <!-- form end -->
+
+        <!-- operation start -->
+        <div class="am-g m-t-15">
+            <a href="{{:MyUrl('admin/operation/addexchangetype')}}" class="am-btn am-btn-secondary am-radius am-btn-xs am-icon-plus"> 新增</a>
+        </div>
+        <!-- operation end -->
+
+        <!-- list start -->
+        <table class="am-table am-table-striped am-table-hover am-text-middle m-t-10 m-l-5">
+            <thead>
+            <tr>
+                <th class="am-hide-sm-only">id</th>
+                <th class="am-hide-sm-only">对比类型名</th>
+                <th class="am-hide-sm-only">积分比例</th>
+                <th class="am-hide-sm-only">对比积分比例</th>
+                <th class="am-hide-sm-only">是否启用</th>
+                <th class="am-hide-sm-only">添加时间</th>
+                <th class="am-hide-sm-only">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{if !empty($data)}}
+            {{foreach $data as $v}}
+            <tr id="data-list-{{$v.id}}">
+                <td>
+                    {{if empty($v['id'])}}<span class="cr-ddd">未填写</span>{{else /}}{{$v.id}}{{/if}}
+                </td>
+                <td class="am-hide-sm-only">
+                    {{if empty($v['name'])}}<span class="cr-ddd">未填写</span>{{else /}}{{$v.name}}{{/if}}
+                </td>
+                <td class="am-hide-sm-only">
+                    {{if empty($v['exchange'])}}<span class="cr-ddd">未填写</span>{{else /}}{{$v.exchange}}{{/if}}
+                </td>
+                <td class="am-hide-sm-only">
+                    {{if empty($v['contrast_exchange'])}}<span class="cr-ddd">未填写</span>{{else /}}{{$v.contrast_exchange}}{{/if}}
+                </td>
+                <td>
+                    <a href="javascript:;" class="am-icon-btn am-icon-check submit-state {{if $v['is_enable'] eq 1}}am-success{{else /}}am-default{{/if}}"  data-url="{{:MyUrl('admin/operation/updExchangeStatus')}}" data-id="{{$v.id}}" data-state="{{$v['is_enable']}}"  data-is-update-status="1"></a>
+                </td>
+                <!--<td class="am-hide-sm-only">
+                    {{if empty($v['is_enable'])}}<span class="cr-ddd">未启用</span>{{else /}}已启用{{/if}}
+                </td>-->
+                <td class="am-hide-sm-only">
+                    {{if empty($v['add_time'])}}<span class="cr-ddd">0</span>{{else /}}{{$v.add_time}}{{/if}}
+                </td>
+                <td class="view-operation">
+                    <button class="am-btn am-btn-default am-btn-xs am-radius am-icon-trash-o submit-delete" data-url="{{:MyUrl('admin/operation/delRushTime')}}" data-id="{{$v.id}}"> 删除</button>
+                </td>
+            </tr>
+            {{/foreach}}
+            {{else /}}
+            <tr><td colspan="20" class="table-no">没有相关数据</td></tr>
+            {{/if}}
+            </tbody>
+        </table>
+        <!-- list end -->
+
+        <!-- page start -->
+        <!-- page end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{include file="public/footer" /}}
+<!-- footer end -->

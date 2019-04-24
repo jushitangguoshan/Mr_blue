@@ -1,0 +1,57 @@
+{{include file="public/header" /}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- form start -->
+        <form class="am-form form-validation view-save" action="{{:MyUrl('admin/operation/updCoupon')}}" method="POST" request-type="ajax-url" request-value="{{:MyUrl('admin/operation/Coupon')}}">
+            <legend>
+				<span class="fs-16">
+					{{if empty($data['id'])}}
+						成员添加
+					{{else /}}
+						成员编辑
+					{{/if}}
+				</span>
+                <a href="{{:MyUrl('admin/operation/Coupon')}}" class="fr fs-14 m-t-5 am-icon-mail-reply"> 返回</a>
+            </legend>
+            {{if(!empty($data))}}
+            <div class="am-form-group">
+                <label>用户名</label>
+                <input type="text" name="username" class="am-radius" placeholder="用户名" data-validation-message="用户名 2~30 个字符" {{if !empty($data)}} value=""{{/if}} />
+            </div>
+            {{else}}
+            <div class="am-form-group">
+                <label>用户名</label>
+                <input type="text" name="username" class="am-radius" placeholder="用户名" data-validation-message="用户名 2~30 个字符" {{if !empty($data)}} value=""{{/if}} />
+            </div>
+            <div class="am-form-group">
+                <label>使用条件</label>
+                <input type="text" name="usage_requirements" class="am-radius" placeholder="购满多少钱" data-validation-message="用户名 2~30 个字符" {{if !empty($data)}} value=""{{/if}} />
+            </div>
+            <div class="am-form-group">
+                <label>优惠价格</label>
+                <input type="text" name="preferential_price" class="am-radius" placeholder="优惠多少钱" data-validation-message="用户名 2~30 个字符" {{if !empty($data)}} value=""{{/if}} />
+            </div>
+             <div class="am-form-group">
+                <label>使用范围</label>
+                <input type="text" name="classify_id" class="am-radius" placeholder="0为通用" data-validation-message="用户名 2~30 个字符" {{if !empty($data)}} value=""{{/if}} />
+            </div>
+             <div class="am-form-group">
+                <label>有效时间 <span style="color: red;">（单位天数）</span></label>
+                <input type="text" name="effective_time" class="am-radius" placeholder="默认3天" a-validation-message="用户名 2~30 个字符" {{if !empty($data)}} value=""{{/if}} />
+            </div>
+            {{/if}}
+            <div class="am-form-group">
+                {{if !empty($data)}}<input type="hidden" name="id"  value="{{$data.id}}" />{{/if}}
+                <button type="submit" class="am-btn am-btn-primary am-radius btn-loading-example am-btn-sm w100" data-am-loading="{loadingText:'处理中...'}">保存</button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{include file="public/footer" /}}
+<!-- footer end -->

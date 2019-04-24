@@ -1,0 +1,71 @@
+{{include file="public/header" /}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- form start -->
+        <form class="am-form form-validation view-save" action="{{:MyUrl('admin/order/update')}}" method="POST" request-type="ajax-url" request-value="{{:MyUrl('admin/order/index')}}" enctype="multipart/form-data">
+            <legend>
+				<span class="fs-16">
+					订单修改
+				</span>
+                <a href="{{:MyUrl('admin/order/index')}}" class="fr fs-14 m-t-5 am-icon-mail-reply"> 返回</a>
+            </legend>
+                <div class="am-form-group">
+                    <label>支付方式</label>
+                    <br />
+                    <select name="payment_id" class="" data-placeholder="请选择...">
+                            {{if $order['payment_id']==0}}
+                                <option value="0">请输入</option>
+                            {{/if}}
+                        {{foreach $payment as $key}}
+                            {{if $key['id']==$order['payment_id']}}
+                                <option value="{{$key['id']}}" selected>{{$key['name']}}</option>
+                            {{else/}}
+                             <option value="{{$key['id']}}" >{{$key['name']}}</option>
+                            {{/if}}
+                        {{/foreach}}
+                    </select>
+                </div>
+            <div class="am-form-group">
+                <label>订单状态</label>
+                <br />
+                <select name="status" class="" data-placeholder="请选择...">
+                    {{foreach $orderStatus as $k=>$v}}
+
+                        {{if $order['status']==$k}}
+                        <option value="{{$k}}" selected>{{$v}}</option>
+                        {{else/}}
+                        <option value="{{$k}}"> {{$v}}</option>
+                        {{/if}}
+                    {{/foreach}}
+                </select>
+            </div>
+
+            <!-- 规格 -->
+
+            <div class="am-form-group">
+                <input type="hidden" name="id"  value="{{$order['id']}}" />
+                <button type="submit" class="am-btn am-btn-primary am-radius btn-loading-example am-btn-sm w100" data-am-loading="{loadingText:'处理中...'}">保存</button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{include file="public/footer" /}}
+<!-- footer end -->
+
+<!-- 拖拽排序初始化 -->
+<script type="text/javascript">
+    $(function()
+    {
+        {{if !empty($data['attribute'])}}
+        {{foreach $data.attribute as $v}}
+        $('ul.attribute-items-ul-{{$v.id}}').dragsort({ dragSelector: 'i.drag-sort-submit', placeHolderTemplate: '<li class="drag-sort-dotted"></li>'});
+        {{/foreach}}
+            {{/if}}
+            });
+</script>

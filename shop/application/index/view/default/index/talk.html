@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>在线客服</title>
+</head>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="{{$Think.__MY_ROOT_PUBLIC__}}static/index/default/js/ajaxfileupload.js"></script>
+<body>
+<div id="zhongjian">
+    <div id="chuangkou" style="height: 450px;width: 620px; margin: 0px auto;border: 1px solid gainsboro;background-color: white;">
+        <div id="neirong" style="height: 400px;width: 600px;">
+            <div style="height: 100px;width: 620px;background-image: none;">
+                <br>　　
+                <div style='height:100px;float:left;width:100px;float:left;'>
+                    <div style='border:2px solid grey;height:84px;width:84px;margin:7px auto; border-radius:10px;overflow:hidden'>
+                        <img src='/' height='80px' width='80px'/>
+                    </div>
+                </div>
+                <div style='height:100px;width:500px;float:left;'>
+                    <div style='height:50px;width:500px;text-align:left;line-height:50px'>
+                        与客服聊天中...
+                    </div>
+                </div>
+            </div>
+            <div id="user_content" style="height: 300px;width: 620px;overflow: auto;overflow-x:hidden ;"><br>
+                <div style='height:100px;width:600px;'>
+
+                </div>
+                <br>
+            </div>
+        </div>
+
+        <!--id="neirong"--><br>
+        <form role="form">
+            <div class="form-group" style="margin-top: 22px">
+                <input type="hidden" id="post" name="post" value="">
+                <input type="hidden" id="receive" name="receive" value="客服">
+                <textarea class="form-control" name="content" style="height: 128px; width: 615px;" id="words"></textarea>
+            </div>
+            <input type="file" name="imgfile" id="imagefile" style="display:none;" onchange="filechange(event)">
+            <img src="" width="100px" height="100px" name="image" id="img-change">
+        </form>
+        <div id="fs" style="height: 50px; width: 600px;text-align: right; padding-right: 50px;">
+            <button type="button" class="btn btn-success fasong" onclick="send_message()">发送</button>
+        </div>
+    </div>
+</div> <!--id=zhongjian-->
+</body>
+<script>
+    /**
+     * 打开和用户沟通的内容
+     * @param username
+     */
+
+    window.onload = function(){
+        getChatInif();
+    }
+    /**
+     * 轮询获取信息
+     */
+    //setInterval("getChatInif()",500);
+    function getChatInif(){
+        var username = getCookie('username');
+        $.ajax({
+            url:"http://yuzhijian.com/index.php/admin/service/getChatList",
+            data:{receiver:username},
+            type:"GET",
+            success: function(data){
+                console.log(data);
+             /*
+                if(data != ''){
+                    var content = "";
+                    for(var i=0;i<data.length;i++){
+                        if(data[i].image != ''){
+                            if (data[i].post != '客服'){
+                                content += "<div style='height:100px;width:600px;margin-right:20px'>\n" +
+                                    "                    <div style='height:100px;width:250px; float:right'>\n" +
+                                    "                        <div style='height:20px;width:250px;font-size:13px;padding-right:20px;margin-right: 50px'>\n" +
+                                    data[i].post + " ：" + data[i].add_time+"</div>\n" +
+                                    "                        <div style='height:80px;width:50px;float:right'>\n" +
+                                    "                            <div style='height:50px;width:50px;margin:0px auto; border-radius:90px;overflow:hidden;'>\n" +
+                                    "                                <img src='./public/static/admin/default/images/smallDuck.gif' height='50px' width='50px'/>\n" +
+                                    "                            </div>\n" +
+                                    "                        </div>\n" +
+                                    "                        <div style='min-height:40px;width:200px;float:right;background-color:pink; border-bottom-left-radius: 40px;border-top-left-radius: 40px;border-top-right-radius: 40px;border-bottom-right-radius: 40px;'>\n" +
+                                    "<img src='"+data[i].image+"' width='100px' height='100px'>"+
+                                    "                            <p style='padding-left:20px; line-height:40px'>\n" +
+                                    data[i].content + "           </p>\n" +
+                                    "                        </div>\n" +
+                                    "                    </div>\n" +
+                                    "                </div>";
+                            }else{
+                                content += "<div style='height:100px;width:600px;'>\n" +
+                                    "                    <div style='height:100px;width:250px;float:left'>\n" +
+                                    "                        <div style='height:20px;width:250px;font-size:13px;padding-left:20px'>\n" +
+                                    data[i].post +"："+ data[i].add_time +"   </div>\n" +
+                                    "                        <div style='height:80px;width:50px;float:left'>\n" +
+                                    "                            <div style='height:50px;width:50px;margin:0px auto; border-radius:90px;overflow:hidden;'>\n" +
+                                    "                                <img src='./public/static/admin/default/images/kefu.png' height='50px' width='50px'/>\n" +
+                                    "                            </div>\n" +
+                                    "                        </div>\n" +
+                                    "                        <div style='min-height:40px;width:200px;float:left;background-color:cornflowerblue; border-bottom-right-radius: 40px;border-top-right-radius: 40px;border-top-left-radius: 40px;border-bottom-left-radius: 40px;'>\n" +
+                                    "<img src='"+data[i].image+"' width='100px' height='100px'>"+
+                                    "                            <p style='padding-left:20px; line-height:40px'>\n" +
+                                    data[i].content + "                         </p>\n" +
+                                    "                        </div>\n" +
+                                    "                    </div>\n" +
+                                    "                </div>" ;
+                                document.getElementById('receive').value = data[i].post;
+                                document.getElementById('post').value = data[i].receive;
+                            }
+                        }else{
+                            if (data[i].post != '客服'){
+                                content += "<div style='height:100px;width:600px;margin-right:20px'>\n" +
+                                    "                    <div style='height:100px;width:250px; float:right'>\n" +
+                                    "                        <div style='height:20px;width:250px;font-size:13px;padding-right:20px;margin-right: 50px'>\n" +
+                                    data[i].post + " ：" + data[i].add_time+"</div>\n" +
+                                    "                        <div style='height:80px;width:50px;float:right'>\n" +
+                                    "                            <div style='height:50px;width:50px;margin:0px auto; border-radius:90px;overflow:hidden;'>\n" +
+                                    "                                <img src='./public/static/admin/default/images/smallDuck.gif' height='50px' width='50px'/>\n" +
+                                    "                            </div>\n" +
+                                    "                        </div>\n" +
+                                    "                        <div style='min-height:40px;width:200px;float:right;background-color:pink; border-bottom-left-radius: 40px;border-top-left-radius: 40px;border-top-right-radius: 40px;border-bottom-right-radius: 40px;'>\n" +
+                                    "                            <p style='padding-left:20px; line-height:40px'>\n" +
+                                    data[i].content + "           </p>\n" +
+                                    "                        </div>\n" +
+                                    "                    </div>\n" +
+                                    "                </div>";
+                            }else{
+                                content += "<div style='height:100px;width:600px;'>\n" +
+                                    "                    <div style='height:100px;width:250px;float:left'>\n" +
+                                    "                        <div style='height:20px;width:250px;font-size:13px;padding-left:20px'>\n" +
+                                    data[i].post +"："+ data[i].add_time +"   </div>\n" +
+                                    "                        <div style='height:80px;width:50px;float:left'>\n" +
+                                    "                            <div style='height:50px;width:50px;margin:0px auto; border-radius:90px;overflow:hidden;'>\n" +
+                                    "                                <img src='./public/static/admin/default/images/kefu.png' height='50px' width='50px'/>\n" +
+                                    "                            </div>\n" +
+                                    "                        </div>\n" +
+                                    "                        <div style='min-height:40px;width:200px;float:left;background-color:cornflowerblue; border-bottom-right-radius: 40px;border-top-right-radius: 40px;border-top-left-radius: 40px;border-bottom-left-radius: 40px;'>\n" +
+                                    "                            <p style='padding-left:20px; line-height:40px'>\n" +
+                                    data[i].content + "                         </p>\n" +
+                                    "                        </div>\n" +
+                                    "                    </div>\n" +
+                                    "                </div>" ;
+                                document.getElementById('receive').value = data[i].post;
+                                document.getElementById('post').value = data[i].receive;
+                            }
+                        }
+
+                    }
+                    content += "<br>";
+                    document.getElementById('user_content').innerHTML = content;
+                }else{
+                    document.getElementById('user_content').innerHTML = '加载失败！！';
+                }
+*/
+            }
+        })
+    }
+
+    /**
+     * 获取cookie
+     */
+    function getCookie(c_name)
+    {
+        var search = c_name + "="//查询检索的值
+        var returnvalue = "";//返回值
+        if (document.cookie.length > 0) {
+            sd = document.cookie.indexOf(search);
+            if (sd!= -1) {
+                sd += search.length;
+                end = document.cookie.indexOf(";", sd);
+                if (end == -1)
+                    end = document.cookie.length;
+                //unescape() 函数可对通过 escape() 编码的字符串进行解码。
+                returnvalue=unescape(document.cookie.substring(sd, end))
+            }
+        }
+        return returnvalue;
+    }
+
+    /**
+     * 发送消息
+     */
+    function send_message(){
+        var content = document.getElementById('words').value;
+        var receiver = document.getElementById('receive').value;
+        var post = document.getElementById('post').value;
+        var formData = new FormData();
+        var imgname = document.getElementById('imagefile');//1
+        var fileObj = imgname.files[0];
+        formData.append('myfile',fileObj);
+        formData.append('post',post);
+        formData.append('receive',receive);
+        formData.append('content',content);
+
+        if(content == '' && imgname.value == ''){
+            alert("内容不能为空！");
+            return ;
+        }
+        $.ajax({
+            url:"http://yuzhijian.com/index.php/admin/service/postContent",
+            type:"POST",
+            data:formData,
+            async:false,
+            processData:false,
+            contentType:false,
+            success:function(data){
+                console.log(data);
+                /*
+                var content = '';
+                if(!data){
+                    content += "<div style='height:100px;width:600px;margin-right:20px'>\n" +
+                        "                    <div style='height:100px;width:250px; float:right'>\n" +
+                        "                        <div style='height:20px;width:250px;font-size:13px;padding-right:20px;margin-right: 50px'>\n" +
+                        data[0].post + " ：" + data[0].add_time+"</div>\n" +
+                        "                        <div style='height:80px;width:50px;float:right'>\n" +
+                        "                            <div style='height:50px;width:50px;margin:0px auto; border-radius:90px;overflow:hidden;'>\n" +
+                        "                                <img src='./public/static/admin/default/images/kefu.png' height='50px' width='50px'/>\n" +
+                        "                            </div>\n" +
+                        "                        </div>\n" +
+                        "                        <div style='min-height:40px;width:200px;float:right;background-color:pink; border-bottom-left-radius: 40px;border-top-left-radius: 40px;border-top-right-radius: 40px;border-bottom-right-radius: 40px;'>\n" +
+                        "                            <p style='padding-left:20px; line-height:40px'>\n" +
+                        data[0].content + "           </p>\n" +
+                        "                        </div>\n" +
+                        "                    </div>\n" +
+                        "                </div><br>";
+                    var cont = document.getElementById('user_content');
+                    document.getElementById('user_content').appendChild(content);
+                }
+                document.getElementById('words').value = "";*/
+            }
+        })
+    }
+
+
+    $("#img-change").click(function () {
+        $("#imagefile").click();
+    })
+
+
+    var filechange=function(event){
+        var files = event.target.files, file;
+        if (files && files.length > 0) {
+            // 获取目前上传的文件
+            file = files[0];// 文件大小校验的动作
+            if(file.size > 1024 * 1024 * 2) {
+                alert('图片大小不能超过 2MB!');
+                return false;
+            }
+            // 获取 window 的 URL 工具
+            var URL = window.URL || window.webkitURL;
+            // 通过 file 生成目标 url
+            var imgURL = URL.createObjectURL(file);
+            //用attr将img的src属性改成获得的url
+            $("#img-change").attr("src",imgURL);
+            // 使用下面这句可以在内存中释放对此 url 的伺服，跑了之后那个 URL 就无效了
+            // URL.revokeObjectURL(imgURL);
+        }
+    };
+
+
+</script>
+<!-- 类库 -->
+<script type='text/javascript' src="{{$Think.__MY_ROOT_PUBLIC__}}static/common/lib/jquery/jquery-2.1.0.js?v={{:MyC('home_static_cache_version')}}"></script>
+<script type='text/javascript' src="{{$Think.__MY_ROOT_PUBLIC__}}static/common/lib/assets/js/amazeui.min.js?v={{:MyC('home_static_cache_version')}}"></script>
+
+<!-- 图片放大镜 -->
+<script type='text/javascript' src="{{$Think.__MY_ROOT_PUBLIC__}}static/common/lib/imagezoom/jquery.imagezoom.min.js?v={{:MyC('home_static_cache_version')}}"></script>
+
+<!-- echarts 图表 -->
+<script type='text/javascript' src="{{$Think.__MY_ROOT_PUBLIC__}}static/common/lib/echarts/echarts.min.js?v={{:MyC('home_static_cache_version')}}"></script>
+<script type='text/javascript' src="{{$Think.__MY_ROOT_PUBLIC__}}static/common/lib/echarts/macarons.js?v={{:MyC('home_static_cache_version')}}"></script>
+
+<!-- amazeui插件 -->
+<script type='text/javascript' src="{{$Think.__MY_ROOT_PUBLIC__}}static/common/lib/amazeui-switch/amazeui.switch.min.js?v={{:MyC('home_static_cache_version')}}"></script>
+<script type='text/javascript' src="{{$Think.__MY_ROOT_PUBLIC__}}static/common/lib/amazeui-chosen/amazeui.chosen.min.js?v={{:MyC('home_static_cache_version')}}"></script>
+<script type='text/javascript' src="{{$Think.__MY_ROOT_PUBLIC__}}static/common/lib/amazeui-dialog/amazeui.dialog.min.js?v={{:MyC('home_static_cache_version')}}"></script>
+
+<!-- 图像裁剪插件 -->
+<script type='text/javascript' src="{{$Think.__MY_ROOT_PUBLIC__}}static/common/lib/cropper/cropper.min.js?v={{:MyC('home_static_cache_version')}}"></script>
+
+<!-- ueditor 编辑器 -->
+<script type='text/javascript' src="{{$Think.__MY_ROOT_PUBLIC__}}static/common/lib/ueditor/ueditor.config.js?v={{:MyC('home_static_cache_version')}}"></script>
+<script type='text/javascript' src="{{$Think.__MY_ROOT_PUBLIC__}}static/common/lib/ueditor/ueditor.all.js?v={{:MyC('home_static_cache_version')}}"></script>
+<script type='text/javascript' src="{{$Think.__MY_ROOT_PUBLIC__}}static/common/lib/ueditor/lang/zh-cn/zh-cn.js?v={{:MyC('home_static_cache_version')}}"></script>
+
+<!-- 颜色选择器 -->
+<script type='text/javascript' src="{{$Think.__MY_ROOT_PUBLIC__}}static/common/lib/colorpicker/jquery.colorpicker.js?v={{:MyC('home_static_cache_version')}}"></script>
+
+<!-- 日期组件 -->
+<script type='text/javascript' src="{{$Think.__MY_ROOT_PUBLIC__}}static/common/lib/My97DatePicker/WdatePicker.js"></script>
+
+<!-- 项目公共 -->
+<script type='text/javascript' src="{{$Think.__MY_ROOT_PUBLIC__}}static/common/js/common.js?v={{:MyC('home_static_cache_version')}}"></script>
+<script type='text/javascript' src="{{$Think.__MY_ROOT_PUBLIC__}}static/index/{{$default_theme}}/js/common.js?v={{:MyC('home_static_cache_version')}}"></script>
+
+<!-- 控制器 -->
+{{if !empty($module_js)}}
+<script type='text/javascript' src="{{$Think.__MY_ROOT_PUBLIC__}}static/{{$module_js}}?v={{:MyC('home_static_cache_version')}}"></script>
+{{/if}}
+
+</html>

@@ -1,0 +1,37 @@
+{{include file="public/header" /}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- form start -->
+        <form class="am-form form-validation view-save" action="{{:MyUrl('admin/operation/addExchangeType')}}" method="POST" request-type="ajax-url" request-value="{{:MyUrl('admin/operation/exchangeProportion ')}}">
+            <legend>
+				<span class="fs-16">
+						成员添加
+				</span>
+                <a href="{{:MyUrl('admin/operation/rushTimeList')}}" class="fr fs-14 m-t-5 am-icon-mail-reply"> 返回</a>
+            </legend>
+            <div class="am-form-group">
+                <label>对比类型名<span style="color: red;">（例子：积分兑换商品）</span></label>
+                <input type="text" name="name" class="am-radius" placeholder="对比类型名" data-validation-message="时间 1~2 个字符" />
+            </div>
+            <div class="am-form-group">
+                <label>积分比例<span style="color: red;">（例子：请输入的积分比例数）</span></label>
+                <input type="text" name="exchange" class="am-radius" placeholder="积分比例" data-validation-message="时间 1~2 个字符" />
+            </div>
+            <div class="am-form-group">
+                <label>对比积分的比例<span style="color: red;">（例子：请输入商品价格比例数）</span></label>
+                <input type="text" name="contrast_exchange" class="am-radius" placeholder="对比积分的比例" data-validation-message="时间 1~2 个字符" />
+            </div>
+            <div class="am-form-group">
+                <button type="submit" class="am-btn am-btn-primary am-radius btn-loading-example am-btn-sm w100" data-am-loading="{loadingText:'处理中...'}">保存</button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{include file="public/footer" /}}
+<!-- footer end -->

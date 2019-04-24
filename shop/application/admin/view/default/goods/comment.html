@@ -1,0 +1,101 @@
+{{include file="public/header" /}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+
+        <!-- title start -->
+            <div>
+                <img src="./public{{$goods['images']}}" style="width: 100px;height: 100px; display:inline-block!important" class="am-img-thumbnail am-radius goods-images am-hide-sm-only" />
+                <span style="font-size: 28px; color: #0b76ac" title="{{$goods.title}}" >&nbsp;&nbsp;{{$goods.title}}</span>
+            </div>
+        <!-- title end -->
+
+        <!-- list start -->
+            <table class="am-table am-table-striped am-table-hover am-text-middle m-t-10 goods-list">
+                <thead>
+                <tr>
+                    <th>用户</th>
+                    <th>评论内容</th>
+                    <th>评分</th>
+                    <th>评论时间</th>
+                    <th>排序</th>
+                    <th>操作</th>
+                    <a href="{{:MyUrl('admin/order/comment')}}" class="fr fs-14 m-t-5 am-icon-mail-reply"> 返回</a>
+                </tr>
+                </thead>
+                <tbody>
+                {{if !empty($data)}}
+                {{foreach $data as $v}}
+                <form class="am-form view-list" action="{{:MyUrl('admin/order/updCommentSort')}}" method="POST">
+                <td>
+                    {{if !empty($v['avatar'])}}
+                    <img src="{{$v['avatar']}}" class="am-img-thumbnail am-radius" width="60" height="60" />
+                    {{else /}}
+                    <span class="cr-ddd">暂无图片</span>
+                    {{/if}}
+                    <span>{{$v['username']}}</span>
+                </td>
+                <td>
+                    <span>{{$v['content']}}</span>
+                    {{if !empty($v['imgs'])}}
+                        {{foreach $v['imgs'] as $val}}
+                            <img src="{{$val['images']}}" class="am-img-thumbnail am-radius" width="60" height="60" />
+                        {{/foreach}}
+                    {{/if}}
+                </td>
+                <td>
+                    五星好评
+                </td>
+
+                <td>
+                        <span>{{$v['add_time']}}</span>
+                </td>
+                <td>
+                    <input type="text" id="sort" name="sort" value="{{$v['sort']}}" style="width: 30px;">
+                    <input type="hidden" name="id" value="{{$v['id']}}">
+                </td>
+
+                <td class="view-operation">
+                    <button type="submit" class="am-btn am-btn-secondary am-btn-sm am-radius form-submit"> 保存</button>
+                </form>
+                    <button class="am-btn am-btn-default am-btn-xs am-radius am-icon-trash-o am-btn-block"  onclick='DelComment("{{$v[\"id\"]}}")' style="width: 50px;"> 删除</button>
+                </td>
+
+                </tr>
+                {{/foreach}}
+                {{else /}}
+                <tr><td colspan="10" class="table-no">暂无评论信息</td></tr>
+                {{/if}}
+                </tbody>
+            </table>
+
+        <!-- list end -->
+
+        <!-- page start -->
+        {{if !empty($data)}}
+        {{$page_html|raw}}
+        {{/if}}
+        <!-- page end -->
+    </div>
+</div>
+<!-- right content end  -->
+<script  type="text/javascript">
+
+    function DelComment(id){
+        if(confirm("删除后无法恢复，确定继续吗？")){
+            $.ajax({
+                type:"post",
+                url:"{{:MyUrl('admin/goods/CommentDel')}}",
+                data:{id:id},
+                success:function (mes){
+                    window.location.reload();
+                }
+            })
+        }
+
+    }
+</script>
+<!-- footer start -->
+{{include file="public/footer" /}}
+<!-- footer end -->

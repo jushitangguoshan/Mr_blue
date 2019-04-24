@@ -1,0 +1,93 @@
+{{include file="public/header" /}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- form start -->
+        <form class="am-form view-list" action="{{:MyUrl('admin/order/comment')}}" method="POST">
+            <div class="am-g">
+                <input type="text" autocomplete="off" class="am-radius form-keyword" placeholder="标题/型号" name="keywords" {{if !empty($params['keywords'])}} value="{{$params.keywords}}"{{/if}} />
+                <button type="submit" class="am-btn am-btn-secondary am-btn-sm am-radius form-submit">查询</button>
+
+                <label class="fs-12 m-l-5 c-p fw-100 more-submit">
+                    更多筛选
+                    <input type="checkbox" name="is_more" value="1" id="is_more" {{if isset($params['is_more']) and $params['is_more'] eq 1}}checked{{/if}} />
+                    <i class="am-icon-angle-down"></i>
+                </label>
+
+                <div class="more-where {{if !isset($params['is_more']) or $params['is_more'] neq 1}}none{{/if}}">
+
+                    <select name="is_shelves" class="am-radius c-p m-t-10 m-l-5 param-where">
+                        <option value="-1">上下架</option>
+                        {{foreach $common_is_shelves_list as $v}}
+                        <option value="{{$v.id}}" {{if isset($params['is_shelves']) and $params['is_shelves'] eq $v['id']}}selected{{/if}}>{{$v.name}}</option>
+                        {{/foreach}}
+                    </select>
+
+                    <div class="param-date param-where m-l-5">
+                        <input type="text" autocomplete="off" name="time_start" class="Wdate am-radius m-t-10" placeholder="起始时间" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd HH:mm:ss'})" {{if isset($params['time_start'])}}value="{{$params.time_start}}"{{/if}}/>
+                        <span>~</span>
+                        <input type="text" autocomplete="off" class="Wdate am-radius m-t-10" placeholder="结束时间" name="time_end" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd HH:mm:ss'})" {{if isset($params['time_end'])}}value="{{$params.time_end}}"{{/if}}/>
+                    </div>
+
+                </div>
+            </div>
+        </form>
+        <!-- form end -->
+
+        <!-- operation start -->
+        <!-- operation end -->
+
+        <!-- list start -->
+        <table class="am-table am-table-striped am-table-hover am-text-middle m-t-10 goods-list">
+            <thead>
+            <tr>
+                <th>标题名称</th>
+                <th>上下架</th>
+                <th class="am-hide-sm-only">评论数量</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{if !empty($data)}}
+            {{foreach $data as $v}}
+            <tr id="data-list-{{$v.id}}" {{if $v['is_shelves'] eq 0}}class="am-active"{{/if}}>
+            <td>
+                    <img src="{{$v['images']}}" class="am-img-thumbnail am-radius goods-images am-hide-sm-only" />
+
+                <span href="{{$v.goods_url}}" target="_blank" title="{{$v.title}}" {{if !empty($v['title_color'])}} style="color:{{$v.title_color}};" {{/if}} >{{$v.title}}</span>
+            </td>
+
+            <td class="am-hide-sm-only">
+                {{if $v['is_shelves'] eq 1}}
+                <p style="color: #0c7cb5;">已上架</p>
+                {{else /}}<p style="color: #333333;"></p>已下架{{/if}}</p>
+
+            </td>
+            <td class="am-hide-sm-only">{{$v.inventory}} {{$v.inventory_unit}}</td>
+            <td class="view-operation">
+                <a href="{{:MyUrl('admin/goods/comment', array_merge( ['oid'=>$v['id']]))}}">
+                    <button class="am-btn am-btn-default am-btn-xs am-radius am-icon-edit"> 查看评论</button>
+                </a>
+            </td>
+            </tr>
+            {{/foreach}}
+            {{else /}}
+            <tr><td colspan="10" class="table-no">没有相关数据</td></tr>
+            {{/if}}
+            </tbody>
+        </table>
+        <!-- list end -->
+
+        <!-- page start -->
+        {{if !empty($data)}}
+        {{$page_html|raw}}
+        {{/if}}
+        <!-- page end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{include file="public/footer" /}}
+<!-- footer end -->

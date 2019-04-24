@@ -1,0 +1,111 @@
+{{include file="public/header" /}}
+<!-- 引用Jquery -->
+<style>
+	.selectDiv {
+		display: inline-block;
+	}
+</style>
+<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<!-- right content start  -->
+<div class="content-right">
+	<div class="content">
+		<!-- form start -->
+		<div class="am-form form-validation view-save" action="{{:MyUrl('admin/notice/save')}}" method="POST" request-type="ajax-url" request-value="{{:MyUrl('admin/notice/Notice_list', $params)}}" enctype="multipart/form-data">
+			<legend>
+				<span class="fs-16">
+					{{if empty($data['id'])}}
+						添加通知
+					{{else /}}
+						编辑通知
+					{{/if}}
+				</span>
+				<a href="{{:MyUrl('admin/notice/Notice_list', $params)}}" class="fr fs-14 m-t-5 am-icon-mail-reply"> 返回</a>
+			</legend>
+			<div class="am-form-group">
+				<label>通知标题</label>
+				<input type="text" name="title" placeholder="通知标题" minlength="2" maxlength="30" data-validation-message="名称格式 2~30 个字符" class="am-radius" {{if !empty($data)}} value="{{$data.title}}"{{/if}} required />
+			</div>
+			<!-- 添加消息内容 -->
+			<div class="am-form-group">
+				<label>通知内容<span class="fs-12 fw-100 cr-999"></span></label>
+				<input type="text" placeholder="通知内容" name="content"  data-validation-message="地址格式 2~50 个字符" class="am-radius" {{if !empty($data)}} value="{{$data.content}}"{{/if}} />
+			</div>
+			<div class="more-where">
+				<label>通知类型</label>
+				<select name="type" class="am-radius c-p m-t-10 m-l-5 param-where" style="width: 6%">
+					<option value="1">系统公告</option>
+					<option value="2">系统通知</option>
+					<option value="3">后台通知</option>
+				</select>
+
+			</div>
+
+			<br><br>
+			<div id="cont" class="selectDiv" style="width: 10%">
+				<div class="selectDiv" >消息接收者</div>
+				<select name="to_who" id="to_who" class="am-radius c-p m-t-10 m-l-5 param-where" >
+					<option value="0">请选择</option>
+					<option value="1">发送给会员</option>
+					<option value="2">发送给管理员</option>
+				</select>
+			</div>
+			<div id="group" name="group" class="selectDiv" style="width: 10%">
+				<select name="group" class="am-radius c-p m-t-10 m-l-5 param-where" >
+					<option value="0">请选择</option>
+				</select>
+			</div>
+
+			<div id="single" name="single" class="selectDiv" style="width: 10%">
+				<select name="single" class="am-radius c-p m-t-10 m-l-5 param-where" >
+					<option value="0">请选择</option>
+				</select>
+			</div>
+		</div>
+
+			<br><br><br>
+            <button type="submit" class="am-btn am-btn-primary am-radius btn-loading-example am-btn-sm w100" data-am-loading="{loadingText:'处理中...'}">保存</button>
+		</form>
+        <!-- form end -->
+	</div>
+</div>
+<!-- right content end  -->
+<script>
+    $("#to_who").change(function(){
+        var who = $("#to_who").val();
+		$.ajax({
+			type:"get",
+			url:"{{:MyUrl('admin/notice/getList')}}",
+			data:{who:who},
+			success: function (res) {
+				var content = '<select name="group" class="am-radius c-p m-t-10 m-l-5 param-where"><option value="0">全部</option>';
+				for(var i=0;i<res.length;i++){
+				    content += '<option value="'+res[i].id+'">'+res[i].name+'</option>';
+				}
+				content += "</select>";
+				console.log(content);
+				$("#group").html(content);
+            }
+		})
+    });
+
+    $("#group").change(function(){
+        var who = $("#to_who").val();
+        var group = $("#group").val();
+        $.ajax({
+            type:"get",
+            url:"{{:MyUrl('admin/notice/getSingle')}}",
+            data:{who:who,group:group},
+            success: function (res) {
+                var content = '<select name="single" class="am-radius c-p m-t-10 m-l-5 param-where"><option value="0">全部</option>';
+                for(var i=0;i<res.length;i++){
+                    content += '<option value="'+res[i].id+'">'+res[i].name+'</option>';
+                }
+                content += "</select>";
+                $("#group").html(content);
+            }
+        })
+    });
+</script>
+<!-- footer start -->
+{{include file="public/footer" /}}
+

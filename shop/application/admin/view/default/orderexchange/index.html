@@ -1,0 +1,136 @@
+{{include file="public/header" /}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- form start -->
+        <form class="am-form view-list" action="{{:MyUrl('admin/Orderexchange/index')}}" method="POST">
+            <div class="am-g">
+                <input type="text" autocomplete="off" class="am-radius form-keyword" placeholder="商品名称" name="goods_name" {{if !empty($params['goods_name'])}} value="{{$params.goods_name}}"{{/if}} />
+                <button type="submit" class="am-btn am-btn-secondary am-btn-sm am-radius form-submit">查询</button>
+                <label class="fs-12 m-l-5 c-p fw-100 more-submit">
+                    更多筛选
+                    <input type="checkbox" name="is_more" value="" id="is_more" {{if isset($params['is_more']) and $params['is_more'] eq 1}}checked{{/if}} />
+                    <i class="am-icon-angle-down"></i>
+                </label>
+
+                <div class="more-where {{if !isset($params['is_more']) or $params['is_more'] neq 1}}none{{/if}}">
+                    <select name="status" class="am-radius c-p m-t-10 m-l-5 param-where">
+                        <option value="">商品换货状态</option>
+                        <option value="0">未审核</option>
+                        <option value="1">已通过</option>
+                        <option value="2">已拒绝</option>
+                        <option value="3">用户寄件中</option>
+                        <option value="4">商家已收货</option>
+                        <option value="5">已完成</option>
+                        <option value="6">已关闭</option>
+                    </select>
+                    <div class="param-date param-where m-l-5">
+                        <br>
+                        选择商品换货时间段
+                        <input type="text" autocomplete="off" name="add_time" class="Wdate am-radius m-t-10" placeholder="创建时间" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd HH:mm:ss'})" {{if isset($params['add_time'])}}value="{{$params.add_time}}"{{/if}}/>
+                        <span>~</span>
+                        <input type="text" autocomplete="off" class="Wdate am-radius m-t-10" placeholder="结束时间" name="end_time" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd HH:mm:ss'})" {{if isset($params['end_time'])}}value="{{$params.end_time}}"{{/if}}/>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <!-- form end -->
+
+        <!-- operation start -->
+<!--        <div class="am-g m-t-15">
+            <a href="" class="am-btn am-btn-secondary am-radius am-btn-xs am-icon-plus"> 新增</a>
+        </div>-->
+        <!-- operation end -->
+
+        <!-- list start -->
+        <table class="am-table am-table-striped am-table-hover am-text-middle m-t-10">
+            <thead>
+            <tr>
+                <th>订单号</th>
+                <th>换货单号码</th>
+                <th>换货原因</th>
+                <th class="am-hide-sm-only">换货状态</th>
+                <th class="am-hide-sm-only">申请时间</th>
+                <th>审核时间</th>
+                <th>拒绝原因</th>
+                <th class="am-hide-sm-only">发货时间</th>
+                <th class="am-hide-sm-only">收货时间</th>
+                <th class="am-hide-sm-only">完成时间</th>
+                <th class="am-hide-sm-only">快递id</th>
+                <th class="am-hide-sm-only">快递单号</th>
+                <th class="am-hide-sm-only">总价格</th>
+                <th class="am-hide-sm-only">添加时间</th>
+                <th class="am-hide-sm-only">详情</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{if(!empty($data))}}
+            {{foreach($data as $v)}}
+            <tr id="data-list" class="am-active">
+                <td>{{if(!empty($v.order_no))}}{{$v.order_no}}{{else/}}无{{/if}}</td>
+                <td>{{if(!empty($v.refund_no))}}{{$v.refund_no}}{{else/}}无{{/if}}</td>
+                <td>{{if(!empty($v.cause))}}{{$v.cause}}{{else/}}无{{/if}}</td>
+                <td class="am-hide-sm-only">
+                    {{if(!empty($v.status))}}
+                    {{if($v.status == 0)}}申请中
+                    {{elseif($v.status == 1)}}已通过
+                    {{elseif($v.status == 2)}}已拒绝
+                    {{elseif($v.status == 3)}}用户寄件中
+                    {{elseif($v.status == 4)}}商家已收货
+                    {{elseif($v.status == 5)}}已完成
+                    {{elseif($v.status == 6)}}已关闭
+                    {{/if}}
+                    {{/if}}
+                </td>
+                <td class="am-hide-sm-only">{{if(!empty($v.application_time))}}{{$v.application_time}}{{else/}}0{{/if}}</td>
+                <td class="am-hide-sm-only">{{if(!empty($v.audit_time))}}{{$v.audit_time}}{{else/}}0{{/if}}</td>
+                <td class="am-hide-sm-only">{{if(!empty($v.reject_cause))}}{{$v.reject_cause}}{{else/}}无{{/if}}</td>
+                <td class="am-hide-sm-only">{{if(!empty($v.delivery_time))}}{{$v.delivery_time}}{{else/}}0{{/if}}</td>
+                <td class="am-hide-sm-only">{{if(!empty($v.collect_time))}}{{$v.collect_time}}{{else/}}0{{/if}}</td>
+                <td class="am-hide-sm-only">{{if(!empty($v.close_time))}}{{$v.close_time}}{{else/}}0{{/if}}</td>
+                <td class="am-hide-sm-only">{{if(!empty($v.express_id))}}{{$v.express_id}}{{else/}}无{{/if}}</td>
+                <td class="am-hide-sm-only">{{if(!empty($v.express_number))}}{{$v.express_number}}{{else/}}无{{/if}}</td>
+                <td class="am-hide-sm-only">{{if(!empty($v.total_price))}}{{$v.total_price}}{{else/}}0.00{{/if}}</td>
+                <td class="am-hide-sm-only">{{if(!empty($v.add_time))}}{{$v.add_time}}{{else/}}0{{/if}}</td>
+                <td>
+                    <a href="{{:MyUrl('admin/Orderexchange/moreOrderexchange', array('id'=>$v['id']))}}"> 查看更多</a>
+
+                </td>
+                {{if($v.status != 0)}}
+                <td class="view-operation">
+                    <a href="{{:MyUrl('admin/Orderexchange/deleteShop',array('id'=>$v['id']))}}">
+                        <button style="margin-left: 35px;" class="am-btn am-btn-default am-btn-xs am-radius am-icon-edit"> 删除</button>
+                    </a>
+                    <!--<button class="am-btn am-btn-default am-btn-xs am-radius am-icon-trash-o submit-delete" style="margin-left: 35px;" data-url="{{:MyUrl('admin/orderrefund/deleteShop')}}" data-id="{{$v.id}}"> 删除</button>-->
+                </td>
+                {{else/}}
+                <td class="view-operation">
+                    <a href="{{:MyUrl('admin/Orderexchange/adoptExamine', array('id'=>$v['id']))}}">
+                        <button class="am-btn am-btn-default am-btn-xs am-radius am-icon-edit" > 通过</button>
+                    </a>
+                    <a href="{{:MyUrl('admin/Orderexchange/refuseExamine', array('id'=>$v['id']))}}">
+                        <button class="am-btn am-btn-default am-btn-xs am-radius am-icon-edit"> 拒绝</button>
+                    </a>
+                </td>
+                {{/if}}
+            </tr>
+            {{/foreach}}
+            {{else / }}
+            <tr><td colspan="7" class="table-no">没有相关数据</td></tr>
+            {{/if}}
+            </tbody>
+        </table>
+        <!-- list end -->
+
+        <!-- page start -->
+
+        <!-- page end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{include file="public/footer" /}}
+<!-- footer end -->

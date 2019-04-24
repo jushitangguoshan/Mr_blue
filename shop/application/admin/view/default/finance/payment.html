@@ -1,0 +1,83 @@
+{{include file="public/header" /}}
+
+<div class="content-right">
+	<div class="content">
+        <form class="am-form view-list" action="{{:MyUrl('admin/finance/gathering')}}" method="POST">
+			<div class="am-g">
+				<input type="text" autocomplete="off" class="am-radius form-keyword" placeholder="订单号" name="keywords" {{if !empty($params['keywords'])}} value="{{$params.keywords}}"{{/if}} />
+				<button type="submit" class="am-btn am-btn-secondary am-btn-sm am-radius form-submit">查询</button>
+				<label class="fs-12 m-l-5 c-p fw-100 more-submit">
+					更多筛选
+					<input type="checkbox" name="is_more" value="1" id="is_more" {{if isset($params['is_more']) and $params['is_more'] eq 1}}checked{{/if}} />
+					<i class="am-icon-angle-down"></i>
+				</label>
+
+				<div class="more-where {{if !isset($params['is_more']) or $params['is_more'] neq 1}} none{{/if}}">
+					<!-- <select name="gender" class="am-radius c-p m-t-10 m-l-5 param-where">
+						<option value="-1">性别</option>
+						{{foreach $common_gender_list as $v}}
+							<option value="{{$v.id}}" {{if isset($params['gender']) and $params['gender'] eq $v['id']}}selected{{/if}}>{{$v.name}}</option>
+						{{/foreach}}
+					</select> -->
+					<div class="param-date param-where m-l-5">
+						<input type="text" autocomplete="off" name="time_start" class="Wdate am-radius m-t-10" placeholder="起始时间" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd HH:mm:ss'})" {{if isset($params['time_start'])}}value="{{$params.time_start}}"{{/if}}/>
+						<span>~</span>
+						<input type="text" autocomplete="off" class="Wdate am-radius m-t-10" placeholder="结束时间" name="time_end" onclick="WdatePicker({firstDayOfWeek:1,dateFmt:'yyyy-MM-dd HH:mm:ss'})" {{if isset($params['time_end'])}}value="{{$params.time_end}}"{{/if}}/>
+					</div>
+				</div>
+			</div>
+        </form>
+        <!-- form end -->
+
+		<!-- list start -->
+		<table class="am-table am-table-striped am-table-hover am-text-middle m-t-10 m-l-5">
+			<thead>
+				<tr>
+					<th>收款单号</th>
+					<th>订单号</th>
+					<th>收款金额（元）</th>
+					<th class="am-hide-sm-only">支付类型</th>
+					<th class="am-hide-sm-only">支付人</th>
+					<th class="am-hide-sm-only">收款时间</th>
+					<th></th>
+					<th></th>
+					<th class="am-hide-sm-only"></th>
+					<th class="am-hide-sm-only"></th>
+				</tr>
+			</thead>
+			<tbody>
+				{{if !empty($data)}}
+					{{foreach $data as $v}}
+						<tr id="data-list-{{$v.id}}">
+							<td>{{$v.id}}</td>
+							<td></td>
+							<td></td>
+							<td class="am-hide-sm-only"></td>
+							<td class="am-hide-sm-only"></td>
+							<td class="am-hide-sm-only"></td>
+							<td></td>
+							<td></td>
+							<td class="am-hide-sm-only"></td>
+							<td class="am-hide-sm-only"></td>
+						</tr>
+					{{/foreach}}
+				{{else /}}
+					<tr><td colspan="10" class="table-no">没有相关数据</td></tr>
+				{{/if}}
+			</tbody>
+		</table>
+		<!-- list end -->
+
+		<!-- page start -->
+		{{if !empty($data)}}
+			{{$page_html|raw}}
+		{{/if}}
+		<!-- page end -->
+	</div>
+</div>
+<!-- right content end  -->
+
+
+<!-- footer start -->
+{{include file="public/footer" /}}
+<!-- footer end -->

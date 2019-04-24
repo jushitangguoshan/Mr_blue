@@ -1,0 +1,195 @@
+{{include file="public/header" /}}
+
+<style>
+    .list {
+        width:300px;
+        height:200px;
+        position:absolute;
+        left:20%;
+        top:10%;
+        margin:-100px 0 0 -150px
+    }
+    strong{
+        font-size: 20px;
+    }
+
+</style>
+<body>
+<div id="zhongjian">
+    <div id="user_list" class="list" style="width: 150px;height: 550px; margin-top: 0%;overflow: auto;overflow-x:hidden ;">
+        <table border="0">
+            {{foreach $user_list as $v}}
+            <tr style="height: 50px;">
+                <td><div style="cursor:pointer;" onclick='getUserChat("{{$v}}")'><strong>{{$v}}</strong></div></td>
+            </tr>
+            {{/foreach}}
+        </table>
+    </div>
+    <div id="chuangkou" class="list" style="height: 550px;width: 620px; margin: 0px auto;border: 1px solid gainsboro;background-color: white;">
+        <div id="neirong" style="height: 400px;width: 600px;">
+            <div style="height: 100px;width: 620px;background-image: none;">
+                <br>　　
+                <div style='height:100px;float:left;width:100px;float:left;'>
+                    <div style='border:2px solid grey;height:84px;width:84px;margin:7px auto; border-radius:10px;overflow:hidden'>
+                        <img src='./public/static/admin/default/images/kefu.png' height='80px' width='80px'/>
+                    </div>
+                </div>
+                <div style='height:100px;width:500px;float:left;'>
+                    <div style='height:50px;width:500px;text-align:left;line-height:50px'>
+                        客服小妹
+                    </div>
+                </div>
+            </div>
+            <div id="user_content" style="height: 300px;width: 620px;overflow: auto;overflow-x:hidden ;"><br>
+                <div style='height:100px;width:600px;'>
+                    <div style='height:100px;width:250px;float:left'>
+                        <div style='height:20px;width:250px;font-size:13px;padding-left:20px'>
+                            name</div>
+                        <div style='height:80px;width:50px;float:left'>
+                            <div style='height:50px;width:50px;margin:0px auto; border-radius:90px;overflow:hidden;'>
+                                <img src='/' height='50px' width='50px'/>
+                            </div>
+                        </div>
+                        <div style='min-height:40px;width:200px;float:left;background-color:cornflowerblue; border-bottom-right-radius: 40px;border-top-right-radius: 40px;border-top-left-radius: 40px;border-bottom-left-radius: 40px;'>
+                            <p style='padding-left:20px; line-height:40px'>
+                                message</p>
+                        </div>
+                    </div>
+                </div>
+                <br>
+
+                <div style='height:100px;width:600px;margin-right:20px'>
+                    <div style='height:100px;width:250px; float:right'>
+                        <div style='height:20px;width:250px;font-size:13px;padding-right:20px;margin-right: 50px'>
+                            user</div>
+                        <div style='height:80px;width:50px;float:right'>
+                            <div style='height:50px;width:50px;margin:0px auto; border-radius:90px;overflow:hidden;'>
+                                <img src='/' height='50px' width='50px'/>
+                            </div>
+                        </div>
+                        <div style='min-height:40px;width:200px;float:right;background-color:pink; border-bottom-left-radius: 40px;border-top-left-radius: 40px;border-top-right-radius: 40px;border-bottom-right-radius: 40px;'>
+                            <p style='padding-left:20px; line-height:40px'>
+                                message...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!--id="neirong"--><br>
+        <form role="form">
+            <div class="form-group" style="margin-top: 22px">
+                <input type="hidden" id="post" name="post" value="客服">
+                <input type="hidden" id="receive" name="receive" value="">
+                <textarea class="form-control" name="content" style="height: 128px; width: 620px;" id="words"></textarea>
+            </div>
+        </form>
+        <div id="fs" style="height: 50px; width: 600px;text-align: right; padding-right: 50px;">
+            <button type="button" class="btn btn-success fasong" onclick="send_message()">发送</button>
+        </div>
+    </div>
+</div> <!--id=zhongjian-->
+</body>
+<script>
+    /**
+     * 打开和用户沟通的内容
+     * @param username
+     */
+    function getUserChat(username){
+        $.ajax({
+            url:"{{:MyUrl('admin/zoology/getUserChat')}}",
+            data:{username:username},
+            type:"POST",
+            success: function(data){
+                if(data != ''){
+                    var content = "";
+                    for(var i=0;i<data.length;i++){
+                        if (data[i].post == '客服'){
+                            content += "<div style='height:100px;width:600px;margin-right:20px'>\n" +
+                                "                    <div style='height:100px;width:250px; float:right'>\n" +
+                                "                        <div style='height:20px;width:250px;font-size:13px;padding-right:20px;margin-right: 50px'>\n" +
+                                data[i].post + " ：" + data[i].add_time+"</div>\n" +
+                                "                        <div style='height:80px;width:50px;float:right'>\n" +
+                                "                            <div style='height:50px;width:50px;margin:0px auto; border-radius:90px;overflow:hidden;'>\n" +
+                                "                                <img src='./public/static/admin/default/images/kefu.png' height='50px' width='50px'/>\n" +
+                                "                            </div>\n" +
+                                "                        </div>\n" +
+                                "                        <div style='min-height:40px;width:200px;float:right;background-color:pink; border-bottom-left-radius: 40px;border-top-left-radius: 40px;border-top-right-radius: 40px;border-bottom-right-radius: 40px;'>\n" +
+                                "                            <p style='padding-left:20px; line-height:40px'>\n" +
+                                data[i].content + "           </p>\n" +
+                                "                        </div>\n" +
+                                "                    </div>\n" +
+                                "                </div>";
+                            document.getElementById('receive').value = data[i].receive;
+                        }else{
+                            content += "<div style='height:100px;width:600px;'>\n" +
+                                "                    <div style='height:100px;width:250px;float:left'>\n" +
+                                "                        <div style='height:20px;width:250px;font-size:13px;padding-left:20px'>\n" +
+                                data[i].post +"："+ data[i].add_time +"   </div>\n" +
+                                "                        <div style='height:80px;width:50px;float:left'>\n" +
+                                "                            <div style='height:50px;width:50px;margin:0px auto; border-radius:90px;overflow:hidden;'>\n" +
+                                "                                <img src='./public/static/admin/default/images/smallDuck.gif' height='50px' width='50px'/>\n" +
+                                "                            </div>\n" +
+                                "                        </div>\n" +
+                                "                        <div style='min-height:40px;width:200px;float:left;background-color:cornflowerblue; border-bottom-right-radius: 40px;border-top-right-radius: 40px;border-top-left-radius: 40px;border-bottom-left-radius: 40px;'>\n" +
+                                "                            <p style='padding-left:20px; line-height:40px'>\n" +
+                                data[i].content + "                         </p>\n" +
+                                "                        </div>\n" +
+                                "                    </div>\n" +
+                                "                </div>" ;
+                            document.getElementById('receive').value = data[i].post;
+                        }
+                    }
+                    content += "<br>";
+                    document.getElementById('user_content').innerHTML = content;
+                }else{
+                    document.getElementById('user_content').innerHTML = '加载失败！！';
+                }
+
+            }
+        })
+    }
+
+    /**
+     * 发送消息
+     */
+    function send_message(){
+        var content = document.getElementById('words').value;
+        if(content == ''){
+            alert("内容不能为空！");
+            return ;
+        }
+        var receive = document.getElementById('receive').value;
+        var post = document.getElementById('post').value;
+        $.ajax({
+            url:"{{:MyUrl('admin/zoology/PostMessage')}}",
+            data:{post:post,receive:receive,content:content},
+            type:"POST",
+            success: function(data){
+                var content = '';
+                if(!data){
+                    content += "<div style='height:100px;width:600px;margin-right:20px'>\n" +
+                    "                    <div style='height:100px;width:250px; float:right'>\n" +
+                    "                        <div style='height:20px;width:250px;font-size:13px;padding-right:20px;margin-right: 50px'>\n" +
+                    data[0].post + " ：" + data[0].add_time+"</div>\n" +
+                    "                        <div style='height:80px;width:50px;float:right'>\n" +
+                    "                            <div style='height:50px;width:50px;margin:0px auto; border-radius:90px;overflow:hidden;'>\n" +
+                    "                                <img src='./public/static/admin/default/images/kefu.png' height='50px' width='50px'/>\n" +
+                    "                            </div>\n" +
+                    "                        </div>\n" +
+                    "                        <div style='min-height:40px;width:200px;float:right;background-color:pink; border-bottom-left-radius: 40px;border-top-left-radius: 40px;border-top-right-radius: 40px;border-bottom-right-radius: 40px;'>\n" +
+                    "                            <p style='padding-left:20px; line-height:40px'>\n" +
+                    data[0].content + "           </p>\n" +
+                    "                        </div>\n" +
+                    "                    </div>\n" +
+                    "                </div><br>";
+                    var cont = document.getElementById('user_content');
+                    document.getElementById('user_content').innerHTML = cont.innerHTML + content;
+                }
+                document.getElementById('words').value = "";
+            }
+        })
+    }
+
+
+
+</script>
+{{include file="public/footer" /}}

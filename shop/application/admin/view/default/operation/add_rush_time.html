@@ -1,0 +1,29 @@
+{{include file="public/header" /}}
+
+<!-- right content start  -->
+<div class="content-right">
+    <div class="content">
+        <!-- form start -->
+        <form class="am-form form-validation view-save" action="{{:MyUrl('admin/operation/addRushTime')}}" method="POST" request-type="ajax-url" request-value="{{:MyUrl('admin/operation/rushTimeList')}}">
+            <legend>
+				<span class="fs-16">
+						成员添加
+				</span>
+                <a href="{{:MyUrl('admin/operation/rushTimeList')}}" class="fr fs-14 m-t-5 am-icon-mail-reply"> 返回</a>
+            </legend>
+            <div class="am-form-group">
+                <label>抢购时间<span style="color: red;">（请输入1~24的整数）</span></label>
+                <input type="text" name="time" class="am-radius" placeholder="抢购时间" data-validation-message="时间 1~2 个字符" />
+            </div>
+            <div class="am-form-group">
+                <button type="submit" class="am-btn am-btn-primary am-radius btn-loading-example am-btn-sm w100" data-am-loading="{loadingText:'处理中...'}">保存</button>
+            </div>
+        </form>
+        <!-- form end -->
+    </div>
+</div>
+<!-- right content end  -->
+
+<!-- footer start -->
+{{include file="public/footer" /}}
+<!-- footer end -->

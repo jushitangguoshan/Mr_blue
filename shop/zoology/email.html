@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="http://www.sucaihuo.com/jquery/css/common.css" />
+    <style type="text/css">
+        .demo{ margin:40px auto 0 auto; min-height:250px;}
+        .demo p{line-height:30px; padding:4px}
+        #result{color:#f30; font-weight:bold}
+        hr{border:1px red dotted;}
+    </style>
+</head>
+<body>
+
+<div class="head">
+    <div class="head_inner clearfix">
+        <ul id="nav">
+            <hr style="height:20px;width:500px;border:none;border-top:1px dashed red;" />
+        </ul>
+    </div>
+</div>
+<div class="container">
+    <div class="demo">
+        <p>账号：<input type="text" style="border-top-color:red;" class="input" name="account" id="account" value="************@163.com"/></p>
+        <p>密码：<input type="password" class="input" name="pwd" id="pwd" value="1838888888888"/></p>
+        <p>smpt：<input type="text" class="input" name="smpt" id="smpt" value="smtp.163.com"/></p>
+        <p>标题：<input type="text" class="input" name="title" id="title" value="测试标题"/></p>
+        <p>内容：<textarea name="body" id="body">测试内容</textarea></p>
+        <p>邮箱：<textarea name="email" id="email" autocomplete="off">略</textarea> 多个邮箱用英文,号隔开</p>
+        <p><input type="button" class="btn" id="send" value="发送邮件" onclick="send_email()"/></p>
+        <div id="result"></div>
+    </div>
+</div>
+<div class="foot">
+</div>
+
+<!--        <script type="text/javascript" src="http://libs.useso.com/js/jquery/1.7.2/jquery.min.js"></script>-->
+<script type="text/javascript" src="jquery-3.1.0.min.js"></script>
+<script type="text/javascript">
+    function send_email() {
+        var account = $('#account').val();
+        if (account == "") {
+            alert("账号不能为空！");
+            return false;
+        }
+        var pwd = $('#pwd').val();
+        if (pwd == "") {
+            alert("密码不能为空！");
+            return false;
+        }
+        var smpt = $('#smpt').val();
+        if (smpt == "") {
+            alert("smpt不能为空！");
+            return false;
+        }
+        var email = $('#email').val();
+        if (email == "") {
+            alert("邮箱不能为空！");
+            return false;
+        }
+
+        var title = $('#title').val();
+        if (title == "") {
+            alert("标题不能为空！");
+            return false;
+        }
+        var body = $('#body').val();
+        if (body == "") {
+            alert("内容不能为空！");
+            return false;
+        }
+        $("#send").addClass("loading").val("loading...").attr("disabled", "disabled");
+        $("#result").html('');
+        $.post("", {account: account, pwd: pwd, email: email, title: title, body: body, smpt: smpt}, function(data) {
+            $("#send").removeAttr("disabled").removeClass("loading").val("发送");
+            $("#result").html(data);
+        })
+//                        var preg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/; //匹配Email
+//                        if (!preg.test(email.value)) {
+//                            alert("Email格式错误！");
+//                            return false;
+//                        }
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+{{include file="public/header" /}}
+
+<head>
+<p hidden>{{$path}}</p>
+    <p>请选择</p>
+    <title></title>
+    <select id="year">
+    </select>
+    <select id="month">
+    </select>
+    <select id="day">
+    </select>
+    <select id="file">
+    </select>
+    <button id="click">确定</button>
+</head>
+<body>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script src="/public/static/admin/default/js/layer/layer.js"></script>
+<script type="text/javascript">
+    var str = $("p").html();
+    // var str = '{"2018":{"1":["C:\/Users\/47029\/Desktop\/Public\/stat\/2018\/01\/backen_2018-01-01.sql","C:\/Users\/47029\/Desktop\/Public\/stat\/2018\/01\/backen_2018-01-02.sql","C:\/Users\/47029\/Desktop\/Public\/stat\/2018\/01\/backen_2018-01-03.sql","C:\/Users\/47029\/Desktop\/Public\/stat\/2018\/01\/backen_2018-01-04.sql","C:\/Users\/47029\/Desktop\/Public\/stat\/2018\/01\/backen_2018-01-05.sql"],"2":["C:\/Users\/47029\/Desktop\/Public\/stat\/2018\/02\/backen_2018-02-01.sql","C:\/Users\/47029\/Desktop\/Public\/stat\/2018\/02\/backen_2018-02-02.sql","C:\/Users\/47029\/Desktop\/Public\/stat\/2018\/02\/backen_2018-02-03.sql","C:\/Users\/47029\/Desktop\/Public\/stat\/2018\/02\/backen_2018-02-04.sql","C:\/Users\/47029\/Desktop\/Public\/stat\/2018\/02\/backen_2018-02-05.sql"]},"2019":{"1":["C:\/Users\/47029\/Desktop\/Public\/stat\/2019\/01\/backen_2019-01-01.sql","C:\/Users\/47029\/Desktop\/Public\/stat\/2019\/01\/backen_2019-01-02.sql","C:\/Users\/47029\/Desktop\/Public\/stat\/2019\/01\/backen_2019-01-03.sql","C:\/Users\/47029\/Desktop\/Public\/stat\/2019\/01\/backen_2019-01-04.sql","C:\/Users\/47029\/Desktop\/Public\/stat\/2019\/01\/backen_2019-01-05.sql"],"2":["C:\/Users\/47029\/Desktop\/Public\/stat\/2019\/02\/backen_2019-02-01.sql","C:\/Users\/47029\/Desktop\/Public\/stat\/2019\/02\/backen_2019-02-02.sql","C:\/Users\/47029\/Desktop\/Public\/stat\/2019\/02\/backen_2019-02-03.sql","C:\/Users\/47029\/Desktop\/Public\/stat\/2019\/02\/backen_2019-02-04.sql","C:\/Users\/47029\/Desktop\/Public\/stat\/2019\/02\/backen_2019-02-05.sql"]}}';
+    var obj = JSON.parse(str);
+    var year_data = new Array()
+    var month_data = new Array()
+    var day_data = new Array()
+    var file_data = new Array()
+    Object.keys(obj).forEach(function(key){
+        year_data.push( "<option value="+key+">"+key+"</option>" )
+    });
+    //选择年份，将所有年份导出并把选择的值放入select中的option中；
+    var year_html = '<option value=0></option>';
+    year_data.forEach(function(key){
+        year_html+= key
+    });
+   $('#year').html(year_html)
+
+    // 选择月份，将所有月份导出并把选择的值放入select中的option中；
+    $("#year").change(function(e){
+        var now_year = $("#year option:selected").val();
+        Object.keys(obj).forEach(function(key){
+            if (key == now_year) {
+                month_data = obj[key]
+            }
+        });
+        var tmp_month = new Array()
+        Object.keys(month_data).forEach(function(key){
+            tmp_month.push("<option value="+key+">"+key+"</option>" )
+        });
+        var month_html = '<option value=""></option>';
+        tmp_month.forEach(function(key){
+            month_html+= key
+        });
+        $('#month').html(month_html)
+    })
+
+    // 选择日，将今日的所有导出并把选择的值放入select中的option中；
+    $("#month").change(function(e){
+        var now_month = $("#month option:selected").val();
+        Object.keys(month_data).forEach(function(key){
+            if (key == now_month) {
+                day_data = month_data[key]
+            }
+        });
+        var tmp_day = new Array()
+        Object.keys(day_data).forEach(function(key){
+            tmp_day.push("<option value="+key+">"+key+"</option>" )
+        });
+        var day_html = '<option value=""></option>';
+        tmp_day.forEach(function(key){
+            day_html+= key
+        });
+        $('#day').html(day_html)
+    })
+    // 选择文件，将所有文件名导出并把选择的值放入select中的option中；
+    $("#day").change(function(e){
+        var now_day = $("#day option:selected").val();
+        Object.keys(day_data).forEach(function(key){
+            if (key == now_day) {
+                file_data = day_data[key]
+            }
+        });
+        var tmp_file = new Array()
+        file_data.forEach(function(key){
+            tmp_file.push("<option value="+key+">"+key+"</option>" )
+        });
+        var file_html = '<option value=""></option>';
+        tmp_file.forEach(function(key){
+            file_html+= key
+        });
+        $('#file').html(file_html)
+    })
+    //把已选择的年月日以及文件拼接并用ajax传值;
+    $('#click').click(function () {
+        var now_year = $("#year option:selected").val();
+        var now_month = $("#month option:selected").val();
+        var now_day = $("#day option:selected").val();
+        var now_file = $("#file option:selected").val();
+        if(now_file==null||now_file==undefined||now_file==""){
+            alert('错误,未选择文件!');
+            return false;
+        }
+        var qures = now_year + '/' + now_month + '/' + now_day + '/' + now_file;
+        $.ajax({
+            type: "GET",
+            url: "{{:MyUrl('admin/system/Getord')}}",
+            data: {'file_name':qures},
+            // dataType: "json",
+            beforeSend: function (XMLHttpRequest) {
+                loadingFlag= layer.msg('正在恢复，请稍候……', { icon: 16, shade: 0.01,shadeClose:false,time : false });
+            },
+            success: function(msg){
+                if(msg.code == 0){
+                    alert('数据恢复失败！');
+                    return false;
+                }
+                layer.close(loadingFlag);
+                alert('数据恢复成功！');
+                window.location.reload();
+            },
+            error: function (msg) {
+                alert(msg);
+            }
+        });
+    })
+</script>
+{{include file="public/footer" /}}
